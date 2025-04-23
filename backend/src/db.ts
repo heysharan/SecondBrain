@@ -1,7 +1,7 @@
 import { model, Schema, Types } from 'mongoose';
 
 const contentTypes = ['image', 'video', 'article', 'audio'];
-
+  
 const usersSchema = new Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },

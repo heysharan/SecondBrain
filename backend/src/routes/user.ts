@@ -7,6 +7,8 @@ import { userModel } from '../db';
 
 const userRouter = Router();
 
+const JWT_SECRET = process.env.JWT_SECRET;
+
 
 userRouter.post('/signup', async (req, res) => {
     const userProfileSchema = z.object({
@@ -59,8 +61,50 @@ userRouter.post('/signup', async (req, res) => {
     }
 });
 
-userRouter.post('/signin', (req, res) => {
-    
+userRouter.post('/signin', async (req, res) => {
+    const userInputSchema = z.object({
+        email: z.string().email('Enter valid email !'),
+        password: z.string()
+    })
+
+    type finalUserInputSchema = z.infer<typeof userInputSchema>
+
+    const response = userInputSchema.safeParse(req.body)
+
+    if(!response.success){
+        const error = response.error.issues.map(e => ({
+            field: e.path,
+            error: e.message
+        }))
+        res.status(409).json({
+            error: error
+        })
+    }
+
+    const { email, password }: finalUserInputSchema = req.body;
+
+
+        const user = await userModel.findOne({
+            email: email
+        })
+        if(!user){
+            res.send(404).json({error: 'User not found!'})
+        }
+
+        const verifiedUser = await bcrypt.compare(password, user!.password) // user! tells TypeScript: “Don’t worry, I know it’s not null because I already checked above.”        
+        
+        if(verifiedUser){
+            const token = jwt.sign({
+                id: user!._id
+            }, JWT_SECRET!) //// the `!` tells TS "I swear this isn't undefined"
+            res.status(200).json({
+                token: token
+            })
+        }else {
+            res.status(403).json({
+                error: 'Invalid credentials'
+            })
+        }
 })
 
 export { userRouter }
