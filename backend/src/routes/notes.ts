@@ -1,17 +1,16 @@
 import { Router } from 'express';
 import { userMiddleware } from '../middlewares/userMiddleware';
-import { notesModel } from '../db';
+import { NotesModel } from '../db';
 
 const notesRouter = Router();
 
 notesRouter.post('/content', userMiddleware, async (req, res) => {
     const { link, type, title, tags } = req.body
-    await notesModel.create({
+    await NotesModel.create({
         link: link,
         type: type,
         title: title,
         tags: tags,
-        //@ts-ignore
         userId: req.userId
     })
     res.json({
@@ -20,9 +19,8 @@ notesRouter.post('/content', userMiddleware, async (req, res) => {
 })
 
 notesRouter.get('/content', userMiddleware, async (req, res) => {
-    //@ts-ignore
     const userId = req.userId;
-    const content = await notesModel.find({
+    const content = await NotesModel.find({
         userId: userId
     }).populate("userId", "firstName")
 
@@ -34,9 +32,8 @@ notesRouter.get('/content', userMiddleware, async (req, res) => {
 notesRouter.delete('/content',userMiddleware, async(req, res) => {
     const { notesId } = req.body
 
-    await notesModel.deleteMany({
+    await NotesModel.deleteMany({
         _id: notesId,
-        //@ts-ignore
         userId: req.userId
     })
 
@@ -47,3 +44,5 @@ notesRouter.delete('/content',userMiddleware, async(req, res) => {
 })
 
 export { notesRouter };
+
+

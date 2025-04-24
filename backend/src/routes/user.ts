@@ -3,7 +3,7 @@ import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 import { z } from 'zod';
 import bcrypt from 'bcrypt';
-import { userModel } from '../db';
+import { UserModel } from '../db';
 
 const userRouter = Router();
 
@@ -45,7 +45,7 @@ userRouter.post('/signup', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 5);
 
     try{
-        await userModel.create({
+        await UserModel.create({
             firstName: firstName,
             lastName: lastName,
             email: email,
@@ -84,7 +84,7 @@ userRouter.post('/signin', async (req, res) => {
     const { email, password }: finalUserInputSchema = req.body;
 
 
-        const user = await userModel.findOne({
+        const user = await UserModel.findOne({
             email: email
         })
         if(!user){

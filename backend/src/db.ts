@@ -2,14 +2,14 @@ import { model, Schema, Types } from 'mongoose';
 
 const contentTypes = ['image', 'video', 'article', 'audio'];
   
-const usersSchema = new Schema({
+const UsersSchema = new Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true }
 })
 
-const notesSchema = new Schema({
+const NotesSchema = new Schema({
     link: { type: String, required: true },
     type: { type: String, enum: contentTypes, required: true },
     title: { type: String, required: true },
@@ -17,19 +17,20 @@ const notesSchema = new Schema({
     userId: { type: Types.ObjectId, ref: 'User', required: true }
 })
 
-const tagsSchema = new Schema({
+const TagsSchema = new Schema({
     title: { type: String, unique: true, required: true }
 })
 
-const linksSchema = new Schema({
+const LinksSchema = new Schema({
     hash: String,
-    userId: { type: Types.ObjectId, ref: 'User'}
+    userId: { type: Types.ObjectId, ref: 'User', required: true, unique: true}
+
 })
 
 
-const userModel = model('User', usersSchema);
-const notesModel = model('Note', notesSchema);
-const tagsModel = model('Tag', tagsSchema);
-const linksModel = model('Link', linksSchema);
+const UserModel = model('User', UsersSchema);
+const NotesModel = model('Note', NotesSchema);
+const TagsModel = model('Tag', TagsSchema);
+const LinksModel = model('Link', LinksSchema);
 
-export { userModel, notesModel, tagsModel, linksModel }
+export { UserModel, NotesModel, TagsModel, LinksModel }
