@@ -3,12 +3,14 @@ import { userRouter } from './routes/user'
 import { notesRouter } from './routes/notes';
 import { linkRouter } from './routes/links';
 import { connect } from 'mongoose';
+import cors from 'cors';
 
 const MONGODB_URL = process.env.MONGODB_URL;
 const PORT = process.env.PORT
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 app.use('/api/v1/user', userRouter)
 app.use('/api/v1/notes', notesRouter)

@@ -5,12 +5,11 @@ import { NotesModel } from '../db';
 const notesRouter = Router();
 
 notesRouter.post('/content', userMiddleware, async (req, res) => {
-    const { link, type, title, tags } = req.body
+    const { link, type, title } = req.body
     await NotesModel.create({
         link: link,
         type: type,
         title: title,
-        tags: tags,
         userId: req.userId
     })
     res.json({

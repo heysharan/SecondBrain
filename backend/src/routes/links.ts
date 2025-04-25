@@ -17,7 +17,7 @@ linkRouter.post('/share', userMiddleware, async (req, res) => {
     
         if(shareLink) {           
             res.json({
-                message: `/share/${shareLink.hash}`
+                hash: `/share/${shareLink.hash}`
             })
             return
         }
@@ -27,7 +27,7 @@ linkRouter.post('/share', userMiddleware, async (req, res) => {
             hash: hash
         })
         res.json({
-            message: `/share/${hash}`
+            hash: `/share/${hash}`
         })
     }
     else{
@@ -35,7 +35,7 @@ linkRouter.post('/share', userMiddleware, async (req, res) => {
             userId: req.userId
         })
         res.json({
-            message: `Removed link`
+            hash: `Removed link`
         })
     }
 })
@@ -48,7 +48,7 @@ linkRouter.get('/:sharelink', async (req, res) => {
     })
     if(!user){
         res.json({
-            message: 'Invalid link!'
+            hash: 'Invalid link!'
         })
         return
     }
